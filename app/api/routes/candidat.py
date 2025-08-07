@@ -12,7 +12,7 @@ def get_users():
     conn = get_connection()
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT ville  FROM DIM_LIEU ")
+        cursor.execute("SELECT ville  FROM DIM_LIEU GROUP BY ville")
         result = cursor.fetchall()
         return {"data": result}
     finally:
