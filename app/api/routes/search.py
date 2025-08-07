@@ -42,7 +42,7 @@ def search_offres(
             return {"error": "Invalid value for date_filter"}
 
         # Ajoute la condition à la clause WHERE
-        conditions.append(f"o.date_creation >= '{since_date.date()}'")
+        conditions.append(f"o.id_date_creation >= '{since_date.date()}'")
 
 
     where_clause = " AND ".join(conditions) if conditions else "TRUE"
