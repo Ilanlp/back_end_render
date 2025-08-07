@@ -85,7 +85,7 @@ def search_offres(
         print("💬 Résultat total_result:", repr(total_result))  # debug
 
         try:
-            total_count = total_result[0][0]
+            total_count = total_result[0]["COUNT(DISTINCT O.ID_OFFRE)"]
         except Exception as e:
             print("⚠️ Erreur dans total_count:", repr(e))
             total_count = 0
