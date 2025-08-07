@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Query
 from typing import List, Optional
 from app.db import queries  # ta fonction raw_query doit être ici
+from datetime import datetime, timedelta
 
 router = APIRouter()
 
@@ -13,7 +14,8 @@ def search_offres(
     ville: Optional[List[str]] = Query(None),
     departement: Optional[List[str]] = Query(None),
     region: Optional[List[str]] = Query(None),
-    contrat: Optional[List[str]] = Query(None)
+    contrat: Optional[List[str]] = Query(None),
+    date_filter: Optional[str] = Query(None, description="last_24h | last_3_days | last_7_days")
 ):
     conditions = []
 
@@ -27,6 +29,21 @@ def search_offres(
         conditions.append(f"({make_like_conditions('s.skill', skill)})")
     if contrat:
         conditions.append(f"({make_like_conditions('c.type_contrat', contrat)})")
+
+    if date_filter:
+        now = datetime.now()
+        if date_filter == "last_24h":
+            since_date = now - timedelta(days=1)
+        elif date_filter == "last_3_days":
+            since_date = now - timedelta(days=3)
+        elif date_filter == "last_7_days":
+            since_date = now - timedelta(days=7)
+        else:
+            return {"error": "Invalid value for date_filter"}
+
+        # Ajoute la condition à la clause WHERE
+        conditions.append(f"o.date_creation >= '{since_date.date()}'")
+
 
     where_clause = " AND ".join(conditions) if conditions else "TRUE"
 
