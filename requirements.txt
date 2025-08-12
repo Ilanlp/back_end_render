@@ -3,3 +3,6 @@ uvicorn
 python-dotenv
 snowflake-connector-python
 pydantic
+pandas
+numpy
+mlflow
